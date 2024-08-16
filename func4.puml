@@ -1,0 +1,66 @@
+
+@startuml id-func4
+
+title: func4  userService.func2() // 实际上，spring下，未增强类一般是单例，看作一个即可
+
+|外部增强类Proxy|
+    start
+    :invoke func4();
+:检查UserService的func4()有无\n@MockTransactional;
+:没有;
+    :method.invoke(target)\nmethod = func4;
+|Proxy内部的target未增强类|
+:func4();
+:userService.func1();
+|target内部注入的增强类Proxy1|
+:func1();
+|target内部注入的增强类Proxy1|
+:检查UserService的func1()有无\n@MockTransactional;
+:没有;
+:method.invoke(target)\nmethod = func1;
+|Proxy1内部的target1未增强类|
+:func1() called;
+|target内部注入的增强类Proxy1|
+:method.invoke(target)\nmethod = func1 结束;
+:检查UserService的func1()有无\n@MockTransactional;
+:没有;
+
+
+|target内部注入的增强类Proxy1|
+:func1() 结束;
+|Proxy内部的target未增强类|
+:userService.func2;
+|target内部注入的增强类Proxy1|
+
+|target内部注入的增强类Proxy1|
+:func2();
+|target内部注入的增强类Proxy1|
+:检查UserService的func2()有无\n@MockTransactional;
+:有;
+:模拟事务开始;
+:method.invoke(target)\nmethod=func2;
+|Proxy1内部的target1未增强类|
+:func2() called;
+|target内部注入的增强类Proxy1|
+:method.invoke(target)\nmethod=func2 结束;
+:检查UserService的func2()有无\n@MockTransactional;
+:有;
+:模拟事务提交;
+
+
+|target内部注入的增强类Proxy1|
+:func2() 结束;
+
+|Proxy内部的target未增强类|
+
+:func4() 结束;
+
+|外部增强类Proxy|
+:method.invoke(target)\nmethod = func4; 结束;
+:检查UserService的func4()有无\n @MockTransactional;
+:没有;
+:func4() 结束;
+:结束;
+
+    stop
+@enduml

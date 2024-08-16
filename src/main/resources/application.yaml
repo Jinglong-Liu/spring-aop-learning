@@ -1,0 +1,5 @@
+spring:
+  aop:
+    proxy-target-class: true
+  application:
+    name: aop-test-service

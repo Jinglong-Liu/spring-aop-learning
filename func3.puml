@@ -1,0 +1,33 @@
+@startuml id-func3
+title: func3():this.func2();
+
+|外部增强类Proxy|
+    start
+    :invoke func3();
+:检查UserService的func3()有无\n@MockTransactional;
+:没有;
+    :method.invoke(target), method = func3;
+|Proxy内部的target未增强类|
+:func3();
+:this.func1();
+:func1() called;
+:this.func1() 结束;
+
+:this.func2();
+:func2() called;
+:this.func2() 结束;
+
+
+|Proxy内部的target未增强类|
+
+:func3() 结束;
+
+|外部增强类Proxy|
+:method.invoke(target) method=func3()结束;
+:检查UserService的func3()有无\n @MockTransactional;
+:没有;
+:func3() 结束;
+:结束;
+
+    stop
+@enduml
