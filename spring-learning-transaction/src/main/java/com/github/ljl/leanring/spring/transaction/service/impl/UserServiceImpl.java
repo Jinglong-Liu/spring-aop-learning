@@ -24,6 +24,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserMapper userMapper;
 
+    public void deduceMoney(Long userId, BigDecimal money) {
+        userMapper.deductMoney(userId, money);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void deduceMoneyRequired(Long userId, BigDecimal money) {
         userMapper.deductMoney(userId, money);
