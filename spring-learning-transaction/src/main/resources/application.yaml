@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: spring-tx-test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${app.mysql.host}:${app.mysql.port}/tx-test
+    username: ${app.mysql.username}
+    password: ${app.mysql.password}
