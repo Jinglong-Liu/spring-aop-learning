@@ -25,6 +25,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Resource
     private ProductMapper productMapper;
 
+    public void deduceStock(Long id, Integer stock) {
+        productMapper.deductStock(id, stock);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void deduceStockRequired(Long id, Integer stock) {
         productMapper.deductStock(id, stock);

@@ -27,6 +27,50 @@ class TxApplicationTest {
 
     @Resource
     private TestServiceImpl testService;
+
+    /**
+     * 全部不加Transactional注解
+     */
+    @Test
+    public void testNoTransactional() {
+        User user = userService.getById(1L);
+        Product product = productService.getById(1L);
+
+        try {
+            testService.testNoTransactional();
+        } catch (RuntimeException r) {
+            System.out.println("runtime exception caused");
+        }
+
+        User user1 = userService.getById(1L);
+        Product product1 = productService.getById(1L);
+        // 全部不回滚
+        Assertions.assertEquals(user.getMoney().subtract(BigDecimal.valueOf(100.0)), user1.getMoney());
+        Assertions.assertEquals(product.getStock() - 1, product1.getStock());
+    }
+
+    /**
+     * 一个开启了@Transactional方法，调用另一个没有加@Transactional的方法
+     * 加入事务，有异常全部回滚
+     */
+    @Test
+    public void testCallNoTransactional() {
+        User user = userService.getById(1L);
+        Product product = productService.getById(1L);
+
+        try {
+            testService.testNewCallNoTransactional();
+        } catch (RuntimeException r) {
+            System.out.println("runtime exception caused");
+        }
+
+        User user1 = userService.getById(1L);
+        Product product1 = productService.getById(1L);
+        // 全部回滚
+        Assertions.assertEquals(user.getMoney(), user1.getMoney());
+        Assertions.assertEquals(product.getStock(), product1.getStock());
+    }
+
     /**
      * default
      * Required

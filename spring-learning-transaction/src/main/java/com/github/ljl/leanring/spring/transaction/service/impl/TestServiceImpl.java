@@ -167,4 +167,27 @@ public class TestServiceImpl {
         productService.deduceStockNever(1L, 1);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void testNewCallNoTransactional() {
+        // 没有加注解，加入当前事务
+        userService.deduceMoney(1L, BigDecimal.valueOf(100.0));
+        // 没有加注解，加入当前事务
+        productService.deduceStock(1L, 1);
+        if (true) {
+            throw new RuntimeException("Test required rollback");
+        }
+        // 都回滚
+    }
+
+    public void testNoTransactional() {
+        // 当前没有事务
+        // 没有加注解，相当于直接提交
+        userService.deduceMoney(1L, BigDecimal.valueOf(100.0));
+        // 没有加注解，相当于直接提交
+        productService.deduceStock(1L, 1);
+        if (true) {
+            throw new RuntimeException("Test required rollback");
+        }
+        // 都不回滚
+    }
 }
